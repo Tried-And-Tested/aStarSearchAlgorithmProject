@@ -1,14 +1,26 @@
-CC = gcc
-CFLAGS = -Wall -std=c18 -ggdb
-KEY="sponge" # Change this to a valid key for your encode/decode
+# Specifiy the target
+all: aShiningStar
 
-test : encode decode test.txt
-	./encode ${KEY} <test.txt >test_encode.txt
-	cat test_encode.txt
-	./decode ${KEY} <test_encode.txt >test_decode.txt
-	diff -i test.txt test_decode.txt
-	
-	
-clean :
-	-rm encode decode
-	-rm test_encode.txt test_decode.txt
+# Specify the object files that the target depends on
+# Also specify the object files needed to create the executable
+
+run: aShiningStar
+	./aShiningStar
+
+aShiningStar: aStarProject.o execute.o
+	g++ aStarProject.o execute.o -o aShiningStar
+
+gdb: aShiningStar
+	gdb aShiningStar
+
+# Specify how the object files should be created from source files
+aStarProject.o: aStarProject.cpp
+	g++ -c -g aStarProject.cpp
+
+execute.o: execute.cpp
+	g++ -c -g execute.cpp
+
+# Specify the object files and executables that are generated
+# and need to be removed to re-compile the whole thing
+clean:
+	rm -f *.o aShiningStar

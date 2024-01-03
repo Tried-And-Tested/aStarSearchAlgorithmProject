@@ -1,13 +1,13 @@
 #include <stdlib.h>
-#include <cstring>
+#include <string>
 #include <iostream>
 
 using namespace std;
 
 class aStarProject{
 private:
-    int xVal = 0;
-    int yVal = 0;
+    int xValue = 0;
+    int yValue = 0;
 
     //pointer to the dynamic array
     int** arrToSearch = nullptr;
@@ -24,4 +24,6 @@ public:
     //returns a string of the shortest path between start and end
     string search(string start, string end);
 
-}
+    //prints out to terminal the coordinate map created in arrToSearch
+    void showMap();
+};
