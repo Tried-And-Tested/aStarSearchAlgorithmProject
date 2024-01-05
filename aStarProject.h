@@ -11,6 +11,8 @@ private:
 
     //pointer to the dynamic array
     int** arrToSearch = nullptr;
+
+    pair<int, int> coordHelper(string input);
 public:
     //builds the dynamically allocated array
     aStarProject(int x, int y);
