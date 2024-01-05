@@ -33,38 +33,38 @@ pair<int, int> aStarProject::coordHelper(string input){
     //Also need to account for this (x, y, z). (Should return an error)
     pair <int, int> toRet;
     string subStr = "";
+    //counter for how many numbers we have
     int counter = 1;
 
     for(int i=0;i<input.size();i++){
-        //Might want to use a switch statement if this gets dumb
-        if( (isdigit(input[i])) && counter < 3){
-            //in here if we found a number and counter has been incremented 0 or 1 time
-            //add to subStr
+        //CONDITIONS TO ACCOUNT FOR:
+        // 1) we find multiple commas
+        //      SOLUTION: have a counter that counts the number of resets. If exceed 1, then return error
+        // 2) we have multiple numbers deliminated by spaces
+        //      SOLUTION: we increment counter if after the 2nd number there are spaces (also solves the 1st edge casse). If we find another number but counter is greater than 2, return error
+        // 3) we find letters while parsing
+        //      SOLUTION: we return an error if we find a letter than isnt a comma or parenthesis
+
+        // WE ALSO WANT TO SKIP OVER WHITESPACE
+
+        //PROBLEM: Current iteration will NOT account for something like "(x,y " as an input
+        if(isdigit(input[i]) && counter < 2){
             subStr.append(input[i]);
         }
-        else if( input[i] == "," ){
-            //in here if we found a comma
-            //we want to account for the 3rd edge case here aswell
-            if(counter == 1){
-                //in here if we did not increment counter
-                //we input what ever we have for subStr and put it into toRet. first
-                toRet.first = atoi(subStr);
-                //we reset subStr to get ready for the next number
-                subStr = "";
-                counter++;
-            }
-            else{
-                cout<<"ERROR: Duplicate comma found"<<endl;
-                exit(0);
-            }
+        else if(input[i] == "," && counter == 1){
+            //turn what ever was in subStr into digits
+            toRet.first = atoi(subStr);
+            //then reset and increment
+            subStr == "";
+            counter++;
         }
-        else if(isalpha(input[i]){
-            //in here if we found a letter that is not a comma
-            //we want to print an error here and exit
-            cout<<"ERROR: Found letter while parsing"<<endl;
-            exit(0);
+        else if(counter == 2 && ( isspace(input[i+1]) || input[i+1] == ")")) {
+            toRet.second = atoi(subStr);
+            subStr == "";
+            break;
         }
     }
+    return toRet;
 }
 
 aStarProject::~aStarProject(){
