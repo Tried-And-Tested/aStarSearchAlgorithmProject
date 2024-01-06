@@ -34,15 +34,16 @@ pair<int, int> aStarProject::coordHelper(string input){
     pair <int, int> toRet;
     string subStr = "";
     //counter for how many numbers we have
-    int counter = 1;
+    int nomNoms = 1;
 
     //if the last char in input is not a parenthesis
-    if(input[input.size()-1] != ")"){
+    if(input[input.size()-1] != ")" || input[0] != "("){
         cout<<"Improper coordinate formatting"<<endl;
         exit(0);
     }
-
-    for(int i=0;i<input.size();i++){
+    //we want check everything from the first parenthesis, stopping once we find
+    //the end parenthesis
+    for(int i=1;i<input.size();i++){
         //CONDITIONS TO ACCOUNT FOR:
         // 1) we find multiple commas
         //      SOLUTION: have a counter that counts the number of resets. If exceed 1, then return error
@@ -54,6 +55,38 @@ pair<int, int> aStarProject::coordHelper(string input){
 
         // WE ALSO WANT TO SKIP OVER WHITESPACE
 
+        if(isdigit(input[i])){
+            if(counter < 3){
+                subStr.append(input[i]);
+            }
+            else{
+               cout<<"ERROR: EXCESSIVE NUMBERS FOUND"<<endl;
+            }
+        }
+        else if(isalpha(input[i])){
+            //if we find a character that isnt a number or space
+            if(input[i] == "," && nomMons < 2){
+                //if we find a comma, incremement counter and put subStr into toRet.first
+                //if we already found a counter, we should also return an error
+                toRet.first = atoi(subStr);
+                subStr = "";
+                nomNoms++;
+            }
+            else if(input[i] == ")"){
+                //when we find the end parenthesis
+                toRet.second = atoi(subStr);
+                subStr = "";
+                nomNoms++;
+                //we shouldnt need this break here but putting in here for
+                //redundancy
+                break;
+            }
+            else{
+                //if not a comma
+               cout<<"ERROR: IMPROPER COORDINATE FORMATTING"<<endl;
+               exit(0);
+            }
+        }
     }
     return toRet;
 }
