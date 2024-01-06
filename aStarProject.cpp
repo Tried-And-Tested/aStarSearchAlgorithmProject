@@ -25,7 +25,7 @@ aStarProject::aStarProject(int x, int y){
     }
 }
 
-pair<int, int> aStarProject::coordHelper(string input){
+pair<int, int> aStarProject::coordHelper(string input){ //DONE
     //point of this method is to format each coordinate as a string to return a pair of ints
 
     //EDGECASE: (    x    ,    y   ) <- need to account for this
@@ -37,13 +37,13 @@ pair<int, int> aStarProject::coordHelper(string input){
     int nomNoms = 1;
 
     //if the last char in input is not a parenthesis
-    if(input[input.size()-1] != ")" || input[0] != "("){
-        cout<<"Improper coordinate formatting"<<endl;
+    if(input[input.size()-1] != ')' || input[0] != '('){
+        cout<<"ERROR: EXCESSIVE NUMBERS FOUND"<<endl;
         exit(0);
     }
     //we want check everything from the first parenthesis, stopping once we find
     //the end parenthesis
-    for(int i=1;i<input.size();i++){
+    for(char & c : input){
         //CONDITIONS TO ACCOUNT FOR:
         // 1) we find multiple commas
         //      SOLUTION: have a counter that counts the number of resets. If exceed 1, then return error
@@ -55,26 +55,26 @@ pair<int, int> aStarProject::coordHelper(string input){
 
         // WE ALSO WANT TO SKIP OVER WHITESPACE
 
-        if(isdigit(input[i])){
-            if(counter < 3){
-                subStr.append(input[i]);
+        if(isdigit(c)){
+            if(nomNoms < 3){
+                subStr+=c;
             }
             else{
                cout<<"ERROR: EXCESSIVE NUMBERS FOUND"<<endl;
             }
         }
-        else if(isalpha(input[i])){
+        else if( c != '(' && !isdigit(c) && !isspace(c)){
             //if we find a character that isnt a number or space
-            if(input[i] == "," && nomMons < 2){
+            if(c == ',' && nomNoms < 2){
                 //if we find a comma, incremement counter and put subStr into toRet.first
                 //if we already found a counter, we should also return an error
-                toRet.first = atoi(subStr);
+                toRet.first = stoi(subStr);
                 subStr = "";
                 nomNoms++;
             }
-            else if(input[i] == ")"){
+            else if(c == ')'){
                 //when we find the end parenthesis
-                toRet.second = atoi(subStr);
+                toRet.second = stoi(subStr);
                 subStr = "";
                 nomNoms++;
                 //we shouldnt need this break here but putting in here for
@@ -102,6 +102,9 @@ aStarProject::~aStarProject(){
 bool aStarProject::build(){
     //for now, plan is to have this method take a text file of bool vals to populate the coordinate plane
     //we need a check if there are not enough bool values to completely populate the coordinate plane
+
+    //pair <int, int> test = coordHelper("(751,  87)");
+    //cout<<test.first<<" "<<test.second<<endl;
     return false;
 }
 
