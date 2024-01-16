@@ -13,6 +13,8 @@ using namespace std;
 //PROBLEM: arrays are statically defined
 //SOLUTION: dynamically allocate each array and the array within the array
 
+//NOTE: 2D Arrays are written as (y,x) instead of (x,y)
+
 //TO FUTURE THOMAS: Might want to start creating a library of DSAs that I commonly use
 
 aStarProject::aStarProject(int x, int y){
@@ -35,7 +37,7 @@ pair<int, int> aStarProject::coordHelper(string input){ //DONE
     string subStr = "";
     //counter for how many numbers we have
     int nomNoms = 1;
-
+warm led lights
     //if the last char in input is not a parenthesis
     if(input[input.size()-1] != ')' || input[0] != '('){
         cout<<"ERROR: EXCESSIVE NUMBERS FOUND"<<endl;
@@ -91,6 +93,16 @@ pair<int, int> aStarProject::coordHelper(string input){ //DONE
     return toRet;
 }
 
+//cause apparently C++ cant print boolean values?
+string aStarProject::bool_caster(bool boolean){
+    if(boolean){
+        return "true";
+    }
+    else{
+        return "false";
+    }
+}
+
 aStarProject::~aStarProject(){
     //first delete all of the arrays within arrToSearch
     for(int i=0; i<yValue; i++)
@@ -103,6 +115,8 @@ bool aStarProject::build(){
     //for now, plan is to have this method take a text file of bool vals to populate the coordinate plane
     //we need a check if there are not enough bool values to completely populate the coordinate plane
 
+    //place the values in the txt file left to right, top to down
+
     //pair <int, int> test = coordHelper("(751,  87)");
     //cout<<test.first<<" "<<test.second<<endl;
     return false;
@@ -110,18 +124,44 @@ bool aStarProject::build(){
 
 string aStarProject::search(string start, string end){
     //if the start and end coords are valid coordinates (IE exist and have val true)
-    //if(){
+    pair <int, int> startCord = coordHelper(start);
+    pair <int, int> endCord = coordHelper(end);
+
+    //check if either out of bounds
+    if( (startCord.first > xValue) || (startCord.second > yValue) || (endCord.first > xValue) || (endCord.second > yValue) ){
         //return "start and end coordinates are not valid coordinates";
-    //}
-    //here if start and end coords are valid
+        cout<<"ERROR: Start and/or end coordinates are out of bounds"<<endl;
+        return "false";
+    }
+    //check if coordinates are false but are within bounds
+    if(arrToSearch[startCord.first][startCord.second] && arrToSearch[endCord.first][endCord.second]){
+        cout<<"ERROR: Start and/or end coordinates are not valid coordiantes"<<endl;
+        return "false";
+    }
+    //here if start and end coords are within bounds and valid
 
     //we want to use a priority queue in a similar fashion to Djistraks single shortest path algorithm
+
     //where we pop the current smallest route and add the step with the smallest heuristic + totDist
+
     //we will calculate the heuristic using pythagorean theorem to get the shortest(direct) path to the end
 
-    return "false";
+    //since we are using a min heap (call it paths) to have the shortest path on top
+    //we create a priority queue of pairs of <int, string>, where int is the currDist and string is the path
+
+    //when we find endCord from startCord, pop top and ret the string
+
+    //if we find a coord that has a false value, add it to the list and give it MAX_INT for pVal
+
+    //we estimate distance with currDist + heuristic = estVal
 }
 
 void aStarProject::showMap(){
+    for(int y=0;y<yValue;y++){
+        for(int x=0;x<xValue;x++){
+            cout<<"["<<bool_caster(arrToSearch[y][x])<<"] ";
+        }
+        cout<<endl;
+    }
     return;
 }

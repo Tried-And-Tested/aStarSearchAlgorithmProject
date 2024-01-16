@@ -13,6 +13,8 @@ private:
     int** arrToSearch = nullptr;
 
     pair<int, int> coordHelper(string input);
+
+    string bool_caster(bool boolean);
 public:
     //builds the dynamically allocated array
     aStarProject(int x, int y);
