@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cmath>
 #include <ctype.h>
 #include "aStarProject.h"
 
@@ -21,9 +22,9 @@ aStarProject::aStarProject(int x, int y){
     xValue = x;
     yValue = y;
 
-    arrToSearch = new int *[yValue];
+    arrToSearch = new string *[yValue];
     for(int i=0;i<yValue;i++){
-        arrToSearch[i] = new int[xValue];
+        arrToSearch[i] = new string[xValue];
     }
 }
 
@@ -37,7 +38,6 @@ pair<int, int> aStarProject::coordHelper(string input){ //DONE
     string subStr = "";
     //counter for how many numbers we have
     int nomNoms = 1;
-warm led lights
     //if the last char in input is not a parenthesis
     if(input[input.size()-1] != ')' || input[0] != '('){
         cout<<"ERROR: EXCESSIVE NUMBERS FOUND"<<endl;
@@ -93,16 +93,6 @@ warm led lights
     return toRet;
 }
 
-//cause apparently C++ cant print boolean values?
-string aStarProject::bool_caster(bool boolean){
-    if(boolean){
-        return "true";
-    }
-    else{
-        return "false";
-    }
-}
-
 aStarProject::~aStarProject(){
     //first delete all of the arrays within arrToSearch
     for(int i=0; i<yValue; i++)
@@ -116,9 +106,23 @@ bool aStarProject::build(){
     //we need a check if there are not enough bool values to completely populate the coordinate plane
 
     //place the values in the txt file left to right, top to down
+    string file = "txtFile.txt";
+    ifstream filereader(file);
+    string inputStr = "";
 
-    //pair <int, int> test = coordHelper("(751,  87)");
-    //cout<<test.first<<" "<<test.second<<endl;
+    //while !EOF
+    int xVal = 0;
+    int yVal = 0;
+    while(getline(filereader, inputStr)){
+        //if we finish a line in the coord. grid
+        if(xVal == xValue){
+            yVal++;
+            xVal =0;
+        }
+        arrToSearch[yVal][xVal] = inputStr;
+        xVal++;
+
+    }
     return false;
 }
 
@@ -133,8 +137,8 @@ string aStarProject::search(string start, string end){
         cout<<"ERROR: Start and/or end coordinates are out of bounds"<<endl;
         return "false";
     }
-    //check if coordinates are false but are within bounds
-    if(arrToSearch[startCord.first][startCord.second] && arrToSearch[endCord.first][endCord.second]){
+    //check if coordinates have false values but are within bounds
+    if(arrToSearch[startCord.first][startCord.second] == "false" && arrToSearch[endCord.first][endCord.second] == "false"){
         cout<<"ERROR: Start and/or end coordinates are not valid coordiantes"<<endl;
         return "false";
     }
@@ -154,12 +158,13 @@ string aStarProject::search(string start, string end){
     //if we find a coord that has a false value, add it to the list and give it MAX_INT for pVal
 
     //we estimate distance with currDist + heuristic = estVal
+    return "done";
 }
 
 void aStarProject::showMap(){
     for(int y=0;y<yValue;y++){
         for(int x=0;x<xValue;x++){
-            cout<<"["<<bool_caster(arrToSearch[y][x])<<"] ";
+            cout<<"["<<arrToSearch[y][x]<<"] ";
         }
         cout<<endl;
     }
