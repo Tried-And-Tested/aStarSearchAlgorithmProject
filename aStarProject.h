@@ -13,6 +13,10 @@ private:
     string** arrToSearch = nullptr;
 
     pair<int, int> coordHelper(string input);
+
+    string listHelper(int xVal, int yVal);
+
+    double pythHelper(int xiVal, int yiVal, int xfVal, int yfVal);
 public:
     //builds the dynamically allocated array
     aStarProject(int x, int y);

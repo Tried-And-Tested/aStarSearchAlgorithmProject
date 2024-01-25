@@ -4,9 +4,12 @@
 #include <string>
 #include <cmath>
 #include <ctype.h>
+#include <queue>
 #include "aStarProject.h"
 
 using namespace std;
+
+typedef pair<int, string> pear;
 
 //PROBLEM: How to represent the coordinate plane to travese
 //SOLUTION: Create a 2d array of boolean values to represent a valid and invalid space. Doing so will allow constant time access to each coordinate
@@ -125,6 +128,14 @@ bool aStarProject::build(){
     }
     return false;
 }
+//helps format each coordinate in the final string
+string aStarProject::listHelper(int xVal, int yVal){
+    return "(" << xVal << "," << yVal << ")";
+}
+//returns the shortest distance between 2 coordinates to provide an estimate distance
+double aStarProject::pythHelper(int xiVal, int yiVal, int xfVal, int yfVal){
+    return sqrt( pow(xiVal-xfVal , 2) + pow(yiVal-yfVal,2) );
+}
 
 string aStarProject::search(string start, string end){
     //if the start and end coords are valid coordinates (IE exist and have val true)
@@ -152,12 +163,47 @@ string aStarProject::search(string start, string end){
 
     //since we are using a min heap (call it paths) to have the shortest path on top
     //we create a priority queue of pairs of <int, string>, where int is the currDist and string is the path
+    priority_queue<pear, vector<pear>, greater<pear>> pathfinder;
 
+    //we push the start cord before doing anything to enter the coord plane
+    //this pair represents the coord the algorithm is currently looking at
+    pair<int, int > search = coordHelper(start);
+
+    //this is the pair that represents the currPath
+    pair<double, string> currPath (0, listHelper(search.first, search.second));
+
+    //initializes the algorithm
+    pathfinder.push(currPath);
+    while(search.first != endCord.first && search.second != endCord.second){
+        //pops and retrieves the top path in pathfinder
+        pair <double, string> temp (pathfinder.top());
+        pathfinder.pop();
+        //if the right cord is greater than 0 but within bounds, push it to pathfinder
+        if(search.first++ < xValue && search.first++ > 0 && search.second < yValue){
+            //if the right cord is false, give it MAX_INT so it is never searched
+            if(arrToSearch[search.second][search.first++] == "false"){
+                pathfinder.push(make_pair(MAX_INT, "DEAD"));
+            }
+            else{
+                //we estimate distance with currDist + heuristic = estVal
+            }
+        }
+        //if the bottom cord is greater than 0 but within bounds, push it to pathfinder
+        if(){
+
+        }
+        //if the left cord is greater than 0 but within bounds, push it to pathfinder
+        if(){
+
+        }
+        //if the top cord is greater than 0 but within bounds, push it to pathfinder
+        if(){
+
+        }
+    }
     //when we find endCord from startCord, pop top and ret the string
 
-    //if we find a coord that has a false value, add it to the list and give it MAX_INT for pVal
 
-    //we estimate distance with currDist + heuristic = estVal
     return "done";
 }
 
